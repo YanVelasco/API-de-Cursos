@@ -1,5 +1,6 @@
 package cursos.api.modules.cursos.entity;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Curso {
+public class CursoEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -41,8 +42,8 @@ public class Curso {
     private Active active;
 
     @CreationTimestamp
-    private java.sql.Timestamp createdAt;
+    private Timestamp createdAt;
 
     @UpdateTimestamp
-    private java.sql.Timestamp updatedAt;
+    private Timestamp updatedAt;
 }
