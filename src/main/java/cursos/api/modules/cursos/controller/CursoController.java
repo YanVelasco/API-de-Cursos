@@ -1,6 +1,7 @@
 package cursos.api.modules.cursos.controller;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cursos.api.modules.cursos.dto.CursoDTO;
 import cursos.api.modules.cursos.dto.ListOfCursosDTO;
+import cursos.api.modules.cursos.dto.UpdateCurso;
 import cursos.api.modules.cursos.usecase.CreateCursoUseCase;
 import cursos.api.modules.cursos.usecase.ListCursosUseCase;
+import cursos.api.modules.cursos.usecase.PutCursoUseCase;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 @RestController
@@ -27,6 +33,9 @@ public class CursoController {
 
     @Autowired
     private ListCursosUseCase listCursosUseCase;
+
+    @Autowired
+    private PutCursoUseCase putCursoUseCase;
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody @Valid CursoDTO cursosDTO){
@@ -46,6 +55,17 @@ public class CursoController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok().body(listOfCursos);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Object> updateCurso(@PathVariable UUID id, @RequestBody UpdateCurso updateCurso) {
+        
+        try {
+            var result = putCursoUseCase.execute(id, updateCurso);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
     
 
