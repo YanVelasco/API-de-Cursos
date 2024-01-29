@@ -15,9 +15,12 @@ import cursos.api.modules.cursos.dto.CursoDTO;
 import cursos.api.modules.cursos.dto.ListOfCursosDTO;
 import cursos.api.modules.cursos.dto.UpdateCurso;
 import cursos.api.modules.cursos.usecase.CreateCursoUseCase;
+import cursos.api.modules.cursos.usecase.DeleteCursoUseCase;
 import cursos.api.modules.cursos.usecase.ListCursosUseCase;
 import cursos.api.modules.cursos.usecase.PutCursoUseCase;
 import jakarta.validation.Valid;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +39,9 @@ public class CursoController {
 
     @Autowired
     private PutCursoUseCase putCursoUseCase;
+
+    @Autowired
+    private DeleteCursoUseCase deleteCursoUseCase;
 
     @PostMapping
     public ResponseEntity<Object> create(@RequestBody @Valid CursoDTO cursosDTO){
@@ -67,6 +73,15 @@ public class CursoController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-    
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Object> deleteCurso(@PathVariable UUID id){
+        try {
+            var result = deleteCursoUseCase.execute(id);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
 }
