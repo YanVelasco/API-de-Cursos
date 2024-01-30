@@ -19,21 +19,21 @@ public class PutCursoUseCase {
     private CursoRepository cursoRepository;
 
     public CursoEntity execute(@NonNull UUID id, UpdateCurso updateCurso) {
-        Optional<CursoEntity> optionalCurso = cursoRepository.findById(id);
+        Optional<CursoEntity> curso = cursoRepository.findById(id);
 
-        if (optionalCurso.isPresent()) {
-            CursoEntity existingCurso = optionalCurso.get();
+        if (curso.isPresent()) {
+            CursoEntity existingCurso = curso.get();
 
-            existingCurso.setName(updateCurso.name());
-            existingCurso.setCategory(updateCurso.category());
+            existingCurso.setName(updateCurso.name() != null ? updateCurso.name() : existingCurso.getName());
+            
+            existingCurso
+                    .setCategory(updateCurso.category() != null ? updateCurso.category() : existingCurso.getCategory());
 
             cursoRepository.save(existingCurso);
 
             return existingCurso;
         } else {
-
             throw new CursoNotFound("Curso não encontrado");
-            
         }
     }
 }
